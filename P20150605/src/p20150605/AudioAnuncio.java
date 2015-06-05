@@ -1,6 +1,7 @@
 package p20150605;
 
 import java.io.File;
+import java.util.Date;
 
 /**
  * Clase que sirve para gestionar cuñas de anuncios publicitarios en radios.
@@ -13,20 +14,16 @@ import java.io.File;
  * @version 1.0.1
  * @see P20150605
  */
-public class AudioSpot
+public class AudioAnuncio extends AudioPista
 {
-    private File archivo;       // manejador para el archivo que contiene el audio (.mp3)
-    private int duracion;       // duración del audio, en segundos
     private String producto;    // nombre del producto anunciado
     private String anunciante;  // nombre de la empresa anunciante
-    
-    public String lasterrormsg;
     
     /**
      * Constructor que sirve para crear una cuña.
      * 
      */
-    public AudioSpot ()
+    public AudioAnuncio ()
     {
         this.archivo = null;
         this.duracion = 0;
@@ -46,44 +43,8 @@ public class AudioSpot
         this.anunciante = anunciante;
     }
     
-    /**
-     * Método que establece la duración.
-     * 
-     * @param duracion indica la duración del audio, en segundos.
-     * @throws IllegalArgumentException error cuando la duración es demasiado larga.
-     */
-    public void setDuracion(int duracion) throws IllegalArgumentException
-    {
-        if (duracion<0)
-            duracion=0;
-        else if (duracion>120)
-            throw new IllegalArgumentException ("Duración demasiado larga");
-        this.duracion = duracion;
-    }
-    /**
-     * Método para establecer un vínculo con el fichero de audio.
-     * 
-     * @param nombre_archivo nombre del fichero que introduzco
-     * @return true si el archivo existe y false si no existe.
-     */
-    public Boolean setArchivo(String nombre_archivo)
-    {
-        this.archivo = new File(nombre_archivo);
-        return this.archivo.exists();
-    }
-    /**
-     * Método que sirva para poner las cuñas en cola de reproducción
-     * 
-     * Puede devolver un valor entero con un còdigo de error, los valores que
-     * indican errores son siempre negativos.
-     * Si se produce un error en lasterrormsg contiene una descripción del error
-     * relacionado con el código negativo devuelto.
-     * 
-     * @param cola_reproduccion orden que van a llevar los anuncios.
-     * @return resultado
-     */
-    public int ProgramaEnCola(Object cola_reproduccion)
-    {
+
+    protected int checkDatos() {
         // comprobamos previamente que no falte nada
         int resultado = 0;
         if (this.duracion==0)
@@ -106,24 +67,7 @@ public class AudioSpot
             lasterrormsg = "No se ha establecido el archivo de audio.";
             resultado = -4;
         }
-        
-        // si todo va bien, programamos
-        if (resultado==0)
-        {
-            try
-            {
-                // falta por implementar la programación en la cola_reproducción
-                lasterrormsg = "";
-                return this.duracion;
-            }
-            catch (Exception ex)
-            {
-                lasterrormsg = ex.getMessage();
-                return -5;
-            }     
-        }
-        else
-            return resultado;
+        return resultado;
     }
     /**
      * Método que exporta una cuña completa.
